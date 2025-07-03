@@ -1,0 +1,23 @@
+name: Update cmd.txt with random string
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-cmd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate random string and update cmd.txt
+        run: |
+          RANDOM_STR=$(cat /dev/urandom | tr -dc 'A-Z0-9' | fold -w 12 | head -n 1)
+          echo "REBOOT_NOW $RANDOM_STR" > cmd.txt
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Update cmd.txt with random string"
+          git push

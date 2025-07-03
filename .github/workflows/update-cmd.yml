@@ -12,12 +12,13 @@ jobs:
 
       - name: Generate random string and update cmd.txt
         run: |
-          RANDOM_STR=$(cat /dev/urandom | tr -dc 'A-Z0-9' | fold -w 12 | head -n 1)
+          RANDOM_STR=$(openssl rand -hex 6 | tr 'a-f' 'A-F')
           echo "REBOOT_NOW $RANDOM_STR" > cmd.txt
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git commit -am "Update cmd.txt with random string"
+          git add cmd.txt
+          git commit -m "Update cmd.txt with random string"
           git push
